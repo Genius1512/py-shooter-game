@@ -1,0 +1,4 @@
+keyboard
+pyfiglet
+termcolor
+promptlib
