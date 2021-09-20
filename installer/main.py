@@ -11,6 +11,8 @@ while not valid:
         valid = True
     elif y_n == "n":
         quit()
+    if not valid:
+        print("Please enter 'y' or 'n'")
 del valid
 del y_n
 
