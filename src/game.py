@@ -86,7 +86,7 @@ class Game:
             self.lose()
 
         if keyboard.is_pressed("esc"):
-            exit()
+            self.quit = True
 
 
     def shoot(self):
