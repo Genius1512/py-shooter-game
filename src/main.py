@@ -8,7 +8,11 @@ import ctypes
 import traceback
 
 
-# pyinstaller main.py --icon=logo.ico --onefile -n Shooter
+# pyinstaller main.py --icon=../logo.ico --onefile -n Shooter
+
+
+class CustomError(Exception):
+    pass
 
 
 class Menu:
@@ -38,7 +42,7 @@ class Menu:
                     app.clear_screen()
                     builder = level_builder.Builder(input("Leveldir: "))
                 elif keyboard.is_pressed("esc"):
-                    quit()
+                    raise CustomError
 
 
         if is_game:
@@ -69,6 +73,8 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    except CustomError as error:
+        pass
     except Exception as error:
         print("Error. Please contact Silvan Schmidt")
         traceback.print_exc()

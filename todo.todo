@@ -1,3 +1,2 @@
-- Fix quit() bug in exe (raise CustomError?)
 - Setup itch.io page
 - create new logo
