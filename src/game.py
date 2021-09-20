@@ -8,6 +8,7 @@ import os
 import standard
 import time as t
 import random as r
+from localStoragePy import localStoragePy
 
 
 
@@ -28,6 +29,12 @@ class Game:
                     self.level_dat.append(line.replace("\n", "").split(" "))
 
         self.score = 0
+        self.localStorage = localStoragePy("text-shooter")
+        self.highscore = self.localStorage.getItem("highscore")
+        if self.highscore == None:
+            self.localStorage.setItem("highscore", 0)
+            self.highscore = 0
+        self.highscore = int(self.highscore)
 
         self.background = " "
         self.screen_size = screen_size
@@ -79,7 +86,7 @@ class Game:
             self.lose()
 
         if keyboard.is_pressed("esc"):
-            quit()
+            exit()
 
 
     def shoot(self):
@@ -227,12 +234,16 @@ class Game:
                 string +=  y + " "
             string += "\n"
         string += colored(f"Score: {self.score}\n", "white")
+        string += colored(f"Highscore: {self.highscore}\n", "white")
         print(string)
 
 
     def lose(self):
         print(colored("U ded", "red"))
         print(colored(f"Score: {str(self.score)}", "white"))
+        if self.score > self.highscore:
+            print("New Highscore!")
+            self.localStorage.setItem("highscore", self.score)
         print("Enter to continue")
         while not keyboard.is_pressed("enter"):
             pass
