@@ -5,26 +5,29 @@ import promptlib
 import win32gui as win32
 import sys
 import os
+import standard
+import time as t
+import random as r
 
 
 
 class Game:
-    def __init__(self, screen_size: int, enemies_count: int, level_path: str):
+    def __init__(self, screen_size: int, enemies_count: int, level: str):
         ctypes.windll.kernel32.SetConsoleTitleW("Shooter - playing")
         self.clear_screen()
 
         self.quit = False
 
-        self.level_path = r"assets\standard_level.shtlvl"
-        if level_path == "own":
-            self.level_path = promptlib.Files().file()
-        else:
-            pass
+        if level == "standard":
+            self.level_dat = standard.level
+        elif level == "own":
+            prompter = promptlib.Files()
+            with open(prompter.file(), "r") as f:
+                self.level_dat = []
+                for line in f:
+                    self.level_dat.append(line.replace("\n", "").split(" "))
 
         self.score = 0
-        self.highscore = 0
-        with open(r"assets\highscore.txt", "r") as f:
-            self.highscore = int(f.read())
 
         self.background = " "
         self.screen_size = screen_size
@@ -164,13 +167,9 @@ class Game:
 
 
     def set_walls(self):
-        with open(self.level_path, "r") as f:
-            level_dat = []
-            for line in f:
-                level_dat.append(line.replace("\n", "").split(" "))
-        for x in range(len(level_dat)):
-            for y in range(len(level_dat[x])):
-                if level_dat[x][y] == "o":
+        for x in range(len(self.level_dat)):
+            for y in range(len(self.level_dat[x])):
+                if self.level_dat[x][y] == "o":
                     self.walls.append({"x_pos": x, "y_pos": y, "icon": "o", "is_active": True})
 
         for x in range(self.screen_size):
@@ -228,17 +227,12 @@ class Game:
                 string +=  y + " "
             string += "\n"
         string += colored(f"Score: {self.score}\n", "white")
-        string += colored(f"Highscore: {self.highscore}\n", "white")
         print(string)
 
 
     def lose(self):
         print(colored("U ded", "red"))
         print(colored(f"Score: {str(self.score)}", "white"))
-        if self.score > self.highscore:
-            print("New Highscore!")
-            with open(r"assets\highscore.txt", "w") as f:
-                f.write(str(self.score))
         print("Enter to continue")
         while not keyboard.is_pressed("enter"):
             pass

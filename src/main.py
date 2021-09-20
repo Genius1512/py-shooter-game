@@ -46,17 +46,8 @@ class Menu:
             while not app.quit:
                 if "Shooter" in win32.GetWindowText(win32.GetForegroundWindow()):
                     is_paused = False
-                    for i in range(150):
-                        try:
-                            keyboard.block_key(i)
-                        except KeyError:
-                            pass
                 else:
                     is_paused = True
-                    try:
-                        keyboard.unblock_key(i)
-                    except KeyError:
-                        pass
 
                 if not is_paused and not keyboard.is_pressed("q"):
                     app.loop()
