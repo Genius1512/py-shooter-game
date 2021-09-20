@@ -5,10 +5,14 @@ import os
 import sys
 import win32gui as win32
 import ctypes
+import traceback
+
+
+# pyinstaller main.py --icon=logo.ico --onefile -n Shooter
 
 
 class Menu:
-    def __init__(self):
+    def __init__(app):
         ctypes.windll.kernel32.SetConsoleTitleW("Shooter")
 
         print("Standard (space)")
@@ -31,26 +35,34 @@ class Menu:
                     app = game.Game(30, 10, "own")
                 elif keyboard.is_pressed("b"):
                     continued = True
-                    self.clear_screen()
+                    app.clear_screen()
                     builder = level_builder.Builder(input("Leveldir: "))
                 elif keyboard.is_pressed("esc"):
                     quit()
 
+
         if is_game:
-            for i in range(150):
-                keyboard.block_key(i)
             is_paused = False
-            while True:
+            while not app.quit:
                 if "Shooter" in win32.GetWindowText(win32.GetForegroundWindow()):
                     is_paused = False
+                    for i in range(150):
+                        try:
+                            keyboard.block_key(i)
+                        except KeyError:
+                            pass
                 else:
                     is_paused = True
+                    try:
+                        keyboard.unblock_key(i)
+                    except KeyError:
+                        pass
 
-                if not is_paused:
+                if not is_paused and not keyboard.is_pressed("q"):
                     app.loop()
 
 
-    def clear_screen(self):
+    def clear_screen(app):
         clear_cmd = "clear"
         if sys.platform == "win32":
             clear_cmd = "cls"
@@ -58,8 +70,14 @@ class Menu:
 
 
 def main():
-    menu = Menu()
+    os.chdir(r"C:\Users\silva\Coding\Python\games\console-based")
+    while True:
+        menu = Menu()
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as error:
+        traceback.print_exc()
+        input("")

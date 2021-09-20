@@ -5,7 +5,6 @@ import random as r
 
 try:
     import keyboard
-    from pyfiglet import figlet_format
     from termcolor import colored
     import ctypes
     import promptlib
@@ -15,7 +14,6 @@ except ImportError:
     os.system("pip install -r requirements.txt")
 
     import keyboard
-    from pyfiglet import figlet_format
     from termcolor import colored
     import ctypes
     import promptlib
@@ -32,7 +30,9 @@ class Game:
         ctypes.windll.kernel32.SetConsoleTitleW("Shooter - playing")
         self.clear_screen()
 
-        self.level_path = r"C:\Users\silva\Coding\Python\games\console-based\level\standard_level.shtlvl"
+        self.quit = False
+
+        self.level_path = r"assets\standard_level.shtlvl"
         if level_path == "own":
             self.level_path = promptlib.Files().file()
         else:
@@ -40,7 +40,7 @@ class Game:
 
         self.score = 0
         self.highscore = 0
-        with open(r"C:\Users\silva\Coding\Python\games\console-based\highscore.txt", "r") as f:
+        with open(r"assets\highscore.txt", "r") as f:
             self.highscore = int(f.read())
 
         self.background = " "
@@ -60,10 +60,6 @@ class Game:
                                 "move": True if r.randint(0, 1) == 0 else False})
 
         self.player = {"x_pos": 2, "y_pos": 2, "icon": ">", "is_active": True, "shoot_timer": 2}
-
-
-        for i in range(150):
-            keyboard.block_key(i)
 
 
     def loop(self):
@@ -254,13 +250,16 @@ class Game:
 
 
     def lose(self):
-        print(colored(figlet_format("U ded"), "red"))
-        print(colored(figlet_format(f"Score: {str(self.score)}"), "white"))
+        print(colored("U ded", "red"))
+        print(colored(f"Score: {str(self.score)}", "white"))
         if self.score > self.highscore:
             print("New Highscore!")
-            with open(r"C:\Users\silva\Coding\Python\games\console-based\highscore.txt", "w") as f:
+            with open(r"assets\highscore.txt", "w") as f:
                 f.write(str(self.score))
-        quit()
+        print("Enter to continue")
+        while not keyboard.is_pressed("enter"):
+            pass
+        self.quit = True
 
 
 def main(mode):
