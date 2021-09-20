@@ -36,8 +36,7 @@ class Menu:
                 elif keyboard.is_pressed("b"):
                     continued = True
                     app.clear_screen()
-                    prompter = promptlib.Files()
-                    builder = level_builder.Builder(prompter.file())
+                    builder = level_builder.Builder(input("Leveldir: "))
                 elif keyboard.is_pressed("esc"):
                     quit()
 
