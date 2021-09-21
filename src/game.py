@@ -14,7 +14,7 @@ from localStoragePy import localStoragePy
 
 class Game:
     def __init__(self, screen_size: int, enemies_count: int, level: str):
-        ctypes.windll.kernel32.SetConsoleTitleW("Shooter - playing")
+        ctypes.windll.kernel32.SetConsoleTitleW("Shooter")
         self.clear_screen()
 
         self.quit = False
@@ -26,7 +26,7 @@ class Game:
             with open(prompter.file(), "r") as f:
                 self.level_dat = []
                 for line in f:
-                    self.level_dat.append(line.replace("\n", "").split(" "))
+                    self.level_dat.append(list(line.replace("\n", "").replace(" ", "")))
 
         self.score = 0
         self.localStorage = localStoragePy("text-shooter")
@@ -239,6 +239,7 @@ class Game:
 
 
     def lose(self):
+
         print(colored("U ded", "red"))
         print(colored(f"Score: {str(self.score)}", "white"))
         if self.score > self.highscore:

@@ -6,6 +6,7 @@ import sys
 import win32gui as win32
 import ctypes
 import traceback
+import promptlib
 
 
 # pyinstaller main.py --icon=../logo.ico --onefile -n Shooter
@@ -25,9 +26,9 @@ class Menu:
         print("Quit (esc)")
 
         continued = False
-        is_game = False
         map = ""
         while not continued:
+            is_game = False
             if "Shooter" in win32.GetWindowText(win32.GetForegroundWindow()):
                 if keyboard.is_pressed("space"):
                     continued = True
@@ -40,7 +41,7 @@ class Menu:
                 elif keyboard.is_pressed("b"):
                     continued = True
                     app.clear_screen()
-                    builder = level_builder.Builder(input("Leveldir: "))
+                    builder = level_builder.Builder(promptlib.Files().file())
                 elif keyboard.is_pressed("esc"):
                     raise CustomError
 
