@@ -3,6 +3,8 @@ import promptlib
 import os
 
 
+# pyinstaller --onefile -n shooter_installer_1.3 main.py
+
 prompter = promptlib.Files()
 
 print("Select the zip file")
