@@ -26,6 +26,8 @@ try:
         Repo.clone_from(r"https://github.com/Genius1512/console-based.git", dir + r"\Shooter")
     except Exception as error:
         print("An error occured. Please check your internet connection")
+        traceback.print_exc()
+        input("")
 
 
     move_cmd = "move " + dir + r"\Shooter\exe\Shooter.exe " + dir

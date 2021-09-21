@@ -65,7 +65,6 @@ class Menu:
 
 
 def main():
-    os.chdir(r"C:\Users\silva\Coding\Python\games\console-based")
     while True:
         menu = Menu()
 
