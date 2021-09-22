@@ -36,6 +36,10 @@ class Game:
             self.highscore = 0
         self.highscore = int(self.highscore)
 
+        self.colors = {"player": "white", "wall": "green", "enemie": "red", "bullet": "white"}
+        self.VALID_COLROS = ["white", "red", "green", "blue"]
+        self.get_colors()
+
         self.background = " "
         self.screen_size = screen_size
         self.screen = [[self.background for x in range(0, self.screen_size)] for y in range(0, self.screen_size)]
@@ -89,6 +93,18 @@ class Game:
             self.quit = True
 
 
+    def get_colors(self):
+        path = self.localStorage.getItem(r"colors_path")
+        if not path == None:
+            with open(path, "r") as f:
+                for line in f:
+                    try:
+                        if line.split(":")[1].replace("\n", "") in self.VALID_COLROS:
+                            self.colors[line.split(":")[0]] = line.split(":")[1].replace("\n", "")
+                    except KeyError:
+                        pass
+
+
     def shoot(self):
         self.player["shoot_timer"] += 1
         if keyboard.is_pressed("space") and self.player["shoot_timer"] >= 6:
@@ -135,30 +151,30 @@ class Game:
             if bullet["is_active"]:
                 bullet["x_pos"] += bullet["x_force"]
                 bullet["y_pos"] += bullet["y_force"]
-            if self.screen[bullet["x_pos"]][bullet["y_pos"]] == "o":
+            if "o" in self.screen[bullet["x_pos"]][bullet["y_pos"]]:
                 bullet["is_active"] = False
 
 
     def player_pos(self):
         if keyboard.is_pressed("w"): # x - 1
-            if not self.screen[self.player["x_pos"] - 1][self.player["y_pos"]] == "o":
+            if not "o" in self.screen[self.player["x_pos"] - 1][self.player["y_pos"]]:
                 self.player["x_pos"] -= 1
         elif keyboard.is_pressed("s"):
-            if not self.screen[self.player["x_pos"] + 1][self.player["y_pos"]] == "o":
+            if not "o" in self.screen[self.player["x_pos"] + 1][self.player["y_pos"]]:
                 self.player["x_pos"] += 1
 
         if keyboard.is_pressed("w"): # x + 1
-            if not self.screen[self.player["x_pos"] - 1][self.player["y_pos"]] == "o":
+            if not "o" in self.screen[self.player["x_pos"] - 1][self.player["y_pos"]]:
                 self.player["x_pos"] -= 1
         elif keyboard.is_pressed("s"):
-            if not self.screen[self.player["x_pos"] + 1][self.player["y_pos"]] == "o":
+            if not "o" in self.screen[self.player["x_pos"] + 1][self.player["y_pos"]]:
                 self.player["x_pos"] += 1
 
         if keyboard.is_pressed("a"): # y - 1
-            if not self.screen[self.player["x_pos"]][self.player["y_pos"] - 1] == "o":
+            if not "o" in self.screen[self.player["x_pos"]][self.player["y_pos"] - 1]:
                 self.player["y_pos"] -= 1
         elif keyboard.is_pressed("d"):
-            if not self.screen[self.player["x_pos"]][self.player["y_pos"] + 1] == "o":
+            if not "o" in self.screen[self.player["x_pos"]][self.player["y_pos"] + 1]:
                 self.player["y_pos"] += 1
 
 
@@ -190,7 +206,7 @@ class Game:
     # entity rendering
     def render_player(self):
         if self.player["is_active"]:
-            self.screen[self.player["x_pos"]][self.player["y_pos"]] = colored(self.player["icon"], "white")
+            self.screen[self.player["x_pos"]][self.player["y_pos"]] = self.player["icon"]
 
 
     def render_walls(self):
@@ -202,20 +218,20 @@ class Game:
     def render_enemies(self):
         for enemie in self.enemies:
             if enemie["is_active"]:
-                if self.screen[enemie["x_pos"]][enemie["y_pos"]] == colored("|", "white") or self.screen[enemie["x_pos"]][enemie["y_pos"]] == colored("-", "white"):
+                if "|" in self.screen[enemie["x_pos"]][enemie["y_pos"]] or "-" in self.screen[enemie["x_pos"]][enemie["y_pos"]]:
                     enemie["is_active"] = False
                     self.score += 1
                     self.enemies.append({"x_pos": r.randint(3, self.screen_size - 3),
                                         "y_pos": r.randint(3, self.screen_size - 3),
                                         "icon": "x", "is_active": True,
                                         "move": True if r.randint(0, 1) == 0 else False})
-                self.screen[enemie["x_pos"]][enemie["y_pos"]] = colored(enemie["icon"], "red")
+                self.screen[enemie["x_pos"]][enemie["y_pos"]] = enemie["icon"]
 
 
     def render_bullets(self):
         for bullet in self.bullets:
             if bullet["is_active"]:
-                self.screen[bullet["x_pos"]][bullet["y_pos"]] = colored(bullet["icon"], "white")
+                self.screen[bullet["x_pos"]][bullet["y_pos"]] = bullet["icon"]
 
 
     # screen handling
@@ -231,7 +247,18 @@ class Game:
         string = colored(f"Time playing: {time_played[:time_played.find('.') + 3]}\n", "white")
         for x in self.screen:
             for y in x:
-                string +=  y + " "
+                _y = ""
+                if y in ["|", "-"]:
+                    _y = colored(y, self.colors["bullet"])
+                elif y in [">", "<", "v", "^"]:
+                    _y = colored(y, self.colors["player"])
+                elif y in ["o"]:
+                    _y = colored(y, self.colors["wall"])
+                elif y in ["x"]:
+                    _y = colored(y, self.colors["enemie"])
+                else:
+                    _y = y
+                string +=  _y + " "
             string += "\n"
         string += colored(f"Score: {self.score}\n", "white")
         string += colored(f"Highscore: {self.highscore}\n", "white")
@@ -239,7 +266,6 @@ class Game:
 
 
     def lose(self):
-
         print(colored("U ded", "red"))
         print(colored(f"Score: {str(self.score)}", "white"))
         if self.score > self.highscore:

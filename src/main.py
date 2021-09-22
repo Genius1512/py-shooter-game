@@ -7,6 +7,7 @@ import win32gui as win32
 import ctypes
 import traceback
 import promptlib
+from localStoragePy import localStoragePy
 
 
 # pyinstaller main.py --icon=../logo.ico --onefile -n Shooter
@@ -23,6 +24,7 @@ class Menu:
         print("Standard (space)")
         print("Own (o)")
         print("Level Builder (b)")
+        print("Colors theme (t)")
         print("Quit (esc)")
 
         continued = False
@@ -42,6 +44,9 @@ class Menu:
                     continued = True
                     app.clear_screen()
                     builder = level_builder.Builder(promptlib.Files().file())
+                elif keyboard.is_pressed("t"):
+                    localStorage = localStoragePy("text-shooter")
+                    localStorage.setItem("colors_path", promptlib.Files().file())
                 elif keyboard.is_pressed("esc"):
                     raise CustomError
 
