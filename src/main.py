@@ -21,11 +21,11 @@ class Menu:
     def __init__(app):
         ctypes.windll.kernel32.SetConsoleTitleW("Shooter")
 
-        print("Standard (space)")
-        print("Own (o)")
-        print("Level Builder (b)")
-        print("Colors theme (t)")
-        print("Quit (esc)")
+        print("""Standard (space)
+Own (o)
+Level Builder (b)
+Theme selector (t)
+Quit (esc)""")
 
         continued = False
         map = ""
