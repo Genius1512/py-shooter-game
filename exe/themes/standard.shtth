@@ -2,3 +2,4 @@ player:white
 wall:green
 bullet:white
 enemie:red
+text: white

@@ -38,7 +38,7 @@ class Game:
             self.highscore = 0
         self.highscore = int(self.highscore)
 
-        self.colors = {"player": "white", "wall": "green", "enemie": "red", "bullet": "white"}
+        self.colors = {"player": "white", "wall": "green", "enemie": "red", "bullet": "white", "text": "white"}
         self.VALID_COLROS = ["white", "red", "green", "blue"]
         self.get_colors()
 
@@ -262,7 +262,7 @@ class Game:
 
     def print_screen(self):
         time_played = str(t.perf_counter())
-        string = colored(f"Time playing: {time_played[:time_played.find('.') + 3]}\n", "white")
+        string = colored(f"Time playing: {time_played[:time_played.find('.') + 3]}\n", self.colors["text"])
         for x in self.screen:
             for y in x:
                 _y = ""
@@ -278,13 +278,13 @@ class Game:
                     _y = y
                 string +=  _y + " "
             string += "\n"
-        string += colored(f"Score: {self.score}\n", "white")
-        string += colored(f"Highscore: {self.highscore}\n", "white")
+        string += colored(f"Score: {self.score}\n", self.colors["text"])
+        string += colored(f"Highscore: {self.highscore}\n", self.colors["text"])
         alive_enemies = 0
         for enemie in self.enemies:
             if enemie["is_active"]:
                 alive_enemies += 1
-        string += colored(f"Alive enemies: {alive_enemies}")
+        string += colored(f"Alive enemies: {alive_enemies}", self.colors["text"])
         print(string)
 
 
