@@ -17,6 +17,8 @@ class Game:
         ctypes.windll.kernel32.SetConsoleTitleW("Shooter")
         self.clear_screen()
 
+        self.enemies_count = enemies_count
+
         self.quit = False
 
         if level == "standard":
@@ -72,6 +74,7 @@ class Game:
         self.bullets_pos()
         self.render_bullets()
 
+        self.enemie_spawning()
         self.enemie_pos()
         self.render_enemies()
 
@@ -86,7 +89,7 @@ class Game:
                 if bullet["x_pos"] == enemie["x_pos"] and bullet["y_pos"] == enemie["y_pos"]:
                     bullet["is_active"] = False
 
-        if self.screen[self.player["x_pos"]][self.player["y_pos"]] == colored(self.enemies[0]["icon"], "red") and self.player["is_active"]:
+        if self.enemies[0]["icon"] in self.screen[self.player["x_pos"]][self.player["y_pos"]] and self.player["is_active"]:
             self.lose()
 
         if keyboard.is_pressed("esc"):
@@ -221,11 +224,26 @@ class Game:
                 if "|" in self.screen[enemie["x_pos"]][enemie["y_pos"]] or "-" in self.screen[enemie["x_pos"]][enemie["y_pos"]]:
                     enemie["is_active"] = False
                     self.score += 1
-                    self.enemies.append({"x_pos": r.randint(3, self.screen_size - 3),
-                                        "y_pos": r.randint(3, self.screen_size - 3),
-                                        "icon": "x", "is_active": True,
-                                        "move": True if r.randint(0, 1) == 0 else False})
+                    if self.score % 5 == 0:
+                        self.enemies_count += 1
                 self.screen[enemie["x_pos"]][enemie["y_pos"]] = enemie["icon"]
+
+
+    def enemie_spawning(self):
+        alive_enemies = 0
+        for enemie in self.enemies:
+            if enemie["is_active"]:
+                alive_enemies += 1
+
+        while alive_enemies < self.enemies_count:
+            self.enemies.append({"x_pos": r.randint(3, self.screen_size - 3),
+                                "y_pos": r.randint(3, self.screen_size - 3),
+                                "icon": "x", "is_active": True,
+                                "move": True if r.randint(0, 1) == 0 else False})
+            alive_enemies = 0
+            for enemie in self.enemies:
+                if enemie["is_active"]:
+                    alive_enemies += 1
 
 
     def render_bullets(self):
@@ -262,6 +280,11 @@ class Game:
             string += "\n"
         string += colored(f"Score: {self.score}\n", "white")
         string += colored(f"Highscore: {self.highscore}\n", "white")
+        alive_enemies = 0
+        for enemie in self.enemies:
+            if enemie["is_active"]:
+                alive_enemies += 1
+        string += colored(f"Alive enemies: {alive_enemies}")
         print(string)
 
 

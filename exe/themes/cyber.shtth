@@ -1,4 +1,4 @@
-player:blue
+player:white
 enemie:green
-wall:white
-bullet:blue
+wall:red
+bullet:white
