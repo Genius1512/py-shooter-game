@@ -10,7 +10,7 @@ import promptlib
 from localStoragePy import localStoragePy
 
 
-# pyinstaller main.py --icon=../logo.ico --onefile -n Shooter
+# pyinstaller C:\Users\silva\Coding\Python\games\console-based\src\main.py --icon=C:\Users\silva\Coding\Python\games\console-based\logo.ico --onefile -n Shooter
 
 
 class CustomError(Exception):
