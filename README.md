@@ -1,6 +1,4 @@
 # console-based
-## How to install
-To install, download the shooter_installer_X.X.exe and open it. Type "y" to confirm the install, and select a directory where it should be installed.
 
 ## How to play
 - WASD to move
@@ -10,7 +8,7 @@ To install, download the shooter_installer_X.X.exe and open it. Type "y" to conf
 You can create own levels by using the level builder. in the menu, press "b" to use it. The level will be saved on closing.
 
 ## Themes
-You can create own color themes. Create a \<theme\>.shtth file and specifie the colors you want. For Example:\
+You can create own color themes. Create a \<theme\>.shtth file and specifie the colors you want. For Example:
 ```
 player: red
 enemie: blue
