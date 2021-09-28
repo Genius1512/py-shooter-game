@@ -8,10 +8,10 @@
 You can create own levels by using the level builder. in the menu, press "b" to use it. The level will be saved on closing.
 
 ## Themes
-You can create own color themes. Create a \<theme\>.shtth file and specifie the colors you want. For Example:
+You can create own color themes. Create a \<theme\>.shtth file and specify the colors you want. For Example:
 ```
 player: red
-enemie: blue
+enemy: blue
 wall: white
 ```
 
@@ -21,11 +21,11 @@ Valid Colors are:
 - green
 - blue
 
-Valid Entitys are:
+Valid Entities are:
 - player
 - wall
 - bullet
-- enemie
+- enemy
 - text
 
 Select the new theme by pressing <kbd>t</kbd> in the main menu and selecting the theme-file.

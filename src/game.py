@@ -38,7 +38,7 @@ class Game:
             self.highscore = 0
         self.highscore = int(self.highscore)
 
-        self.colors = {"player": "white", "wall": "green", "enemie": "red", "bullet": "white", "text": "white"}
+        self.colors = {"player": "white", "wall": "green", "enemy": "red", "bullet": "white", "text": "white"}
         self.VALID_COLROS = ["white", "red", "green", "blue"]
         self.get_colors()
 
@@ -74,8 +74,8 @@ class Game:
         self.bullets_pos()
         self.render_bullets()
 
-        self.enemie_spawning()
-        self.enemie_pos()
+        self.enemy_spawning()
+        self.enemy_pos()
         self.render_enemies()
 
         self.print_screen()
@@ -85,8 +85,8 @@ class Game:
         self.time_score = int(t.perf_counter())
 
         for bullet in self.bullets:
-            for enemie in self.enemies:
-                if bullet["x_pos"] == enemie["x_pos"] and bullet["y_pos"] == enemie["y_pos"]:
+            for enemy in self.enemies:
+                if bullet["x_pos"] == enemy["x_pos"] and bullet["y_pos"] == enemy["y_pos"]:
                     bullet["is_active"] = False
 
         if self.enemies[0]["icon"] in self.screen[self.player["x_pos"]][self.player["y_pos"]] and self.player["is_active"]:
@@ -122,31 +122,31 @@ class Game:
             self.player["shoot_timer"] = 0
 
 
-    def enemie_pos(self):
-        for enemie in self.enemies:
-            if enemie["is_active"] and enemie["move"]:
-                wanted_x_pos = enemie["x_pos"]
-                wanted_y_pos = enemie["y_pos"]
-                if enemie["x_pos"] < self.player["x_pos"]:
-                    wanted_x_pos = enemie["x_pos"] + 1
-                elif enemie["x_pos"] > self.player["x_pos"]:
-                    wanted_x_pos = enemie["x_pos"] - 1
+    def enemy_pos(self):
+        for enemy in self.enemies:
+            if enemy["is_active"] and enemy["move"]:
+                wanted_x_pos = enemy["x_pos"]
+                wanted_y_pos = enemy["y_pos"]
+                if enemy["x_pos"] < self.player["x_pos"]:
+                    wanted_x_pos = enemy["x_pos"] + 1
+                elif enemy["x_pos"] > self.player["x_pos"]:
+                    wanted_x_pos = enemy["x_pos"] - 1
 
-                if enemie["y_pos"] < self.player["y_pos"]:
-                    wanted_y_pos = enemie["y_pos"] + 1
-                elif enemie["y_pos"] > self.player["y_pos"]:
-                    wanted_y_pos = enemie["y_pos"] - 1
+                if enemy["y_pos"] < self.player["y_pos"]:
+                    wanted_y_pos = enemy["y_pos"] + 1
+                elif enemy["y_pos"] > self.player["y_pos"]:
+                    wanted_y_pos = enemy["y_pos"] - 1
 
                 can_go = True
-                for test_enemie in self.enemies:
-                    if test_enemie["is_active"] and test_enemie["x_pos"] == wanted_x_pos and test_enemie["y_pos"] == wanted_y_pos:
+                for test_enemy in self.enemies:
+                    if test_enemy["is_active"] and test_enemy["x_pos"] == wanted_x_pos and test_enemy["y_pos"] == wanted_y_pos:
                         can_go = False
                         break
 
                 if can_go:
-                    enemie["x_pos"] = wanted_x_pos
-                    enemie["y_pos"] = wanted_y_pos
-            enemie["move"] = not enemie["move"]
+                    enemy["x_pos"] = wanted_x_pos
+                    enemy["y_pos"] = wanted_y_pos
+            enemy["move"] = not enemy["move"]
 
 
     def bullets_pos(self):
@@ -219,20 +219,20 @@ class Game:
 
 
     def render_enemies(self):
-        for enemie in self.enemies:
-            if enemie["is_active"]:
-                if "|" in self.screen[enemie["x_pos"]][enemie["y_pos"]] or "-" in self.screen[enemie["x_pos"]][enemie["y_pos"]]:
-                    enemie["is_active"] = False
+        for enemy in self.enemies:
+            if enemy["is_active"]:
+                if "|" in self.screen[enemy["x_pos"]][enemy["y_pos"]] or "-" in self.screen[enemy["x_pos"]][enemy["y_pos"]]:
+                    enemy["is_active"] = False
                     self.score += 1
                     if self.score % 5 == 0:
                         self.enemies_count += 1
-                self.screen[enemie["x_pos"]][enemie["y_pos"]] = enemie["icon"]
+                self.screen[enemy["x_pos"]][enemy["y_pos"]] = enemy["icon"]
 
 
-    def enemie_spawning(self):
+    def enemy_spawning(self):
         alive_enemies = 0
-        for enemie in self.enemies:
-            if enemie["is_active"]:
+        for enemy in self.enemies:
+            if enemy["is_active"]:
                 alive_enemies += 1
 
         while alive_enemies < self.enemies_count:
@@ -241,8 +241,8 @@ class Game:
                                 "icon": "x", "is_active": True,
                                 "move": True if r.randint(0, 1) == 0 else False})
             alive_enemies = 0
-            for enemie in self.enemies:
-                if enemie["is_active"]:
+            for enemy in self.enemies:
+                if enemy["is_active"]:
                     alive_enemies += 1
 
 
@@ -273,7 +273,7 @@ class Game:
                 elif y in ["o"]:
                     _y = colored(y, self.colors["wall"])
                 elif y in ["x"]:
-                    _y = colored(y, self.colors["enemie"])
+                    _y = colored(y, self.colors["enemy"])
                 else:
                     _y = y
                 string +=  _y + " "
@@ -281,8 +281,8 @@ class Game:
         string += colored(f"Score: {self.score}\n", self.colors["text"])
         string += colored(f"Highscore: {self.highscore}\n", self.colors["text"])
         alive_enemies = 0
-        for enemie in self.enemies:
-            if enemie["is_active"]:
+        for enemy in self.enemies:
+            if enemy["is_active"]:
                 alive_enemies += 1
         string += colored(f"Alive enemies: {alive_enemies}", self.colors["text"])
         print(string)
