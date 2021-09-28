@@ -79,7 +79,7 @@ class Game:
         self.render_enemies()
 
         self.print_screen()
-        t.sleep(0.1) # TODO: time with perf_counter
+        t.sleep(0.1)
         self.clear_screen()
 
         self.time_score = int(t.perf_counter())
