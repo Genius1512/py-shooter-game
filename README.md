@@ -30,8 +30,18 @@ Valid Entitys are:
 
 Select the new theme by pressing <kbd>t</kbd> in the main menu and selecting the theme-file.
 
+## Menu
+The Menu is controlled by keypresses:
+- <kbd>s</kbd> to play in standard map
+- <kbd>o</kbd> to select own level to play
+- <kbd>b</kbd> to open the level builder
+- <kbd>t</kbd> to select a theme
+- <kbd>esc</kbd> to quit
+
 ## Links
 [Github](https://github.com/Genius1512)\
 [Itch.io](https://genius1512.itch.io/text-shooter)
 
 ___Thanks for downloading___
+
+___Genius1512___
